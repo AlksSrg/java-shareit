@@ -6,6 +6,7 @@ import ru.practicum.shareit.user.model.User;
 import java.time.LocalDateTime;
 
 /**
+ * TODO Sprint add-item-requests.
  * Модель запроса вещи.
  * Содержит основную информацию о запросе:
  * идентификатор, текст запроса, пользователь {@link User} сделавший запрос, дату и время создания запроса.

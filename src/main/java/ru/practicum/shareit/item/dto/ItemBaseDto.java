@@ -25,18 +25,38 @@ public class ItemBaseDto {
         this.requestId = requestId;
     }
 
+    /**
+     * Возвращает название вещи.
+     *
+     * @return название вещи
+     */
     public String name() {
         return name;
     }
 
+    /**
+     * Возвращает описание вещи.
+     *
+     * @return описание вещи
+     */
     public String description() {
         return description;
     }
 
+    /**
+     * Возвращает статус доступности вещи.
+     *
+     * @return true если вещь доступна для бронирования
+     */
     public Boolean available() {
         return available;
     }
 
+    /**
+     * Возвращает идентификатор запроса.
+     *
+     * @return идентификатор запроса или null если вещь создана не по запросу
+     */
     public Long requestId() {
         return requestId;
     }

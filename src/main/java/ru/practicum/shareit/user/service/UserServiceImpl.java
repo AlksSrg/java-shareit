@@ -1,5 +1,6 @@
 package ru.practicum.shareit.user.service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.exception.user.EmailAlreadyExistsException;
@@ -31,6 +32,7 @@ public class UserServiceImpl implements UserService {
      * @return созданный пользователь в формате DTO
      */
     @Override
+    @Transactional
     public UserResponseDto create(UserCreateRequestDto userCreateRequestDto) {
         // Проверка на существование пользователя с таким email
         checkEmailUniqueness(null, userCreateRequestDto.email());
@@ -48,6 +50,7 @@ public class UserServiceImpl implements UserService {
      * @return обновленный пользователь в формате DTO
      */
     @Override
+    @Transactional
     public UserResponseDto update(Long id, UserUpdateRequestDto userUpdateRequestDto) {
         User user = getUserOrThrow(id);
 
@@ -68,6 +71,7 @@ public class UserServiceImpl implements UserService {
      * @param id идентификатор пользователя
      */
     @Override
+    @Transactional
     public void delete(Long id) {
         getUserOrThrow(id);
         userRepository.deleteById(id);
@@ -117,7 +121,8 @@ public class UserServiceImpl implements UserService {
      * @throws EmailAlreadyExistsException если email уже существует у другого пользователя
      */
     private void checkEmailUniqueness(Long userId, String email) {
-        userRepository.findByEmail(email)
+        String normalizedEmail = email.toLowerCase().trim();
+        userRepository.findByEmailIgnoreCase(normalizedEmail)
                 .ifPresent(existingUser -> {
                     if (userId == null || !existingUser.getId().equals(userId)) {
                         throw new EmailAlreadyExistsException(

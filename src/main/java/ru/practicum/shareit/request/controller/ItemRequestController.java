@@ -6,6 +6,7 @@ import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.request.service.RequestService;
 
 /**
+ * TODO Sprint add-item-requests.
  * Контроллер для работы с запросами вещей.
  * Обеспечивает REST API для управления информацией о запросах вещей.
  * Поддерживает операции:

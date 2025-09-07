@@ -1,9 +1,6 @@
 package ru.practicum.shareit.user.mapper;
 
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingConstants;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.*;
 import ru.practicum.shareit.user.dto.UserCreateRequestDto;
 import ru.practicum.shareit.user.dto.UserResponseDto;
 import ru.practicum.shareit.user.dto.UserUpdateRequestDto;
@@ -23,6 +20,7 @@ public interface UserMapper {
      * @param dto DTO для создания пользователя
      * @return сущность User
      */
+    @Mapping(target = "id", ignore = true)
     User toEntity(UserCreateRequestDto dto);
 
     /**
@@ -39,5 +37,6 @@ public interface UserMapper {
      * @param dto    DTO с данными для обновления
      * @param entity сущность для обновления
      */
+    @Mapping(target = "id", ignore = true)
     void updateEntity(UserUpdateRequestDto dto, @MappingTarget User entity);
 }

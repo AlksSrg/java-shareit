@@ -1,8 +1,6 @@
 package ru.practicum.shareit.item.service;
 
-import ru.practicum.shareit.item.dto.ItemCreateRequestDto;
-import ru.practicum.shareit.item.dto.ItemResponseDto;
-import ru.practicum.shareit.item.dto.ItemUpdateRequestDto;
+import ru.practicum.shareit.item.dto.*;
 import ru.practicum.shareit.item.model.Item;
 
 import java.util.List;
@@ -57,12 +55,14 @@ public interface ItemService {
     Item getItemOrThrow(Long id);
 
     /**
-     * Находит все вещи владельца.
+     * Находит все вещи владельца с пагинацией.
      *
      * @param ownerId идентификатор владельца
+     * @param from    начальная позиция
+     * @param size    количество элементов
      * @return список вещей владельца
      */
-    List<ItemResponseDto> findByOwnerId(Long ownerId);
+    List<ItemResponseDto> findByOwnerId(Long ownerId, Integer from, Integer size);
 
     /**
      * Находит вещи по идентификатору запроса.
@@ -76,7 +76,19 @@ public interface ItemService {
      * Ищет доступные вещи по тексту в названии или описании.
      *
      * @param text текст для поиска
+     * @param from начальная позиция для пагинации
+     * @param size количество элементов на странице
      * @return список найденных вещей
      */
-    List<ItemResponseDto> searchAvailableItems(String text);
+    List<ItemResponseDto> searchAvailableItems(String text, Integer from, Integer size);
+
+    /**
+     * Добавляет комментарий к вещи.
+     *
+     * @param itemId                  идентификатор вещи
+     * @param userId                  идентификатор пользователя
+     * @param commentCreateRequestDto DTO с данными для создания комментария
+     * @return созданный комментарий в формате DTO
+     */
+    CommentResponseDto addComment(Long itemId, Long userId, CommentCreateRequestDto commentCreateRequestDto);
 }

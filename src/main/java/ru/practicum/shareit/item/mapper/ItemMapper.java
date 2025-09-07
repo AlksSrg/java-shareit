@@ -1,9 +1,8 @@
 package ru.practicum.shareit.item.mapper;
 
 import org.mapstruct.*;
-import ru.practicum.shareit.item.dto.ItemCreateRequestDto;
-import ru.practicum.shareit.item.dto.ItemResponseDto;
-import ru.practicum.shareit.item.dto.ItemUpdateRequestDto;
+import ru.practicum.shareit.item.dto.*;
+import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 
 /**
@@ -22,6 +21,7 @@ public interface ItemMapper {
      */
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "owner", ignore = true)
+    @Mapping(target = "requestId", ignore = true)
     Item toEntity(ItemCreateRequestDto dto);
 
     /**
@@ -30,6 +30,10 @@ public interface ItemMapper {
      * @param item сущность вещи
      * @return DTO ответа
      */
+    @Mapping(source = "owner", target = "owner")
+    @Mapping(target = "comments", ignore = true)
+    @Mapping(target = "lastBooking", ignore = true)
+    @Mapping(target = "nextBooking", ignore = true)
     ItemResponseDto toResponseDto(Item item);
 
     /**
@@ -38,5 +42,29 @@ public interface ItemMapper {
      * @param dto    DTO с данными для обновления
      * @param entity сущность для обновления
      */
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "owner", ignore = true)
+    @Mapping(target = "requestId", ignore = true)
     void updateEntity(ItemUpdateRequestDto dto, @MappingTarget Item entity);
+
+    /**
+     * Преобразует сущность Comment в DTO ответа.
+     *
+     * @param comment сущность комментария
+     * @return DTO ответа с комментарием
+     */
+    @Mapping(source = "author.name", target = "authorName")
+    CommentResponseDto toCommentResponseDto(Comment comment);
+
+    /**
+     * Преобразует DTO создания в сущность Comment.
+     *
+     * @param dto DTO для создания комментария
+     * @return сущность Comment
+     */
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "item", ignore = true)
+    @Mapping(target = "author", ignore = true)
+    @Mapping(target = "created", ignore = true)
+    Comment toCommentEntity(CommentCreateRequestDto dto);
 }

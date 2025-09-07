@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.shareit.exception.item.CommentNotAllowedException;
 import ru.practicum.shareit.exception.item.ItemNotFound;
 import ru.practicum.shareit.exception.item.ItemNotOwnedByUserException;
 import ru.practicum.shareit.item.dto.*;
@@ -182,8 +183,9 @@ public class ItemServiceImpl implements ItemService {
         Item item = getItemOrThrow(itemId);
 
         // Проверяем, что пользователь брал вещь в аренду и аренда завершена
-        if (!commentRepository.existsByUserAndItemWithCompletedBooking(userId, itemId)) {
-            throw new IllegalArgumentException("Пользователь не брал вещь в аренду или аренда не завершена");
+        if (!commentRepository.hasUserBookedItemWithCompletedBooking(userId, itemId)) {
+            log.warn("Пользователь {} не имеет завершенного бронирования вещи {}", userId, itemId);
+            throw new CommentNotAllowedException("Пользователь не брал вещь в аренду или аренда не завершена");
         }
 
         Comment comment = itemMapper.toCommentEntity(commentCreateRequestDto);

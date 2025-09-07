@@ -42,6 +42,6 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
             "AND b.item.id = :itemId " +
             "AND b.status = 'APPROVED' " +
             "AND b.end < CURRENT_TIMESTAMP")
-    boolean existsByUserAndItemWithCompletedBooking(@Param("userId") Long userId,
-                                                    @Param("itemId") Long itemId);
+    boolean hasUserBookedItemWithCompletedBooking(@Param("userId") Long userId,
+                                                  @Param("itemId") Long itemId);
 }

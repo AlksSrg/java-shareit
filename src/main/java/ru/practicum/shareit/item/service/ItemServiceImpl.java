@@ -2,18 +2,26 @@ package ru.practicum.shareit.item.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import ru.practicum.shareit.exception.item.CommentNotAllowedException;
 import ru.practicum.shareit.exception.item.ItemNotFound;
 import ru.practicum.shareit.exception.item.ItemNotOwnedByUserException;
-import ru.practicum.shareit.item.dto.ItemCreateRequestDto;
-import ru.practicum.shareit.item.dto.ItemResponseDto;
-import ru.practicum.shareit.item.dto.ItemUpdateRequestDto;
+import ru.practicum.shareit.item.dto.*;
 import ru.practicum.shareit.item.mapper.ItemMapper;
+import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.item.repository.CommentRepository;
 import ru.practicum.shareit.item.repository.ItemRepository;
+import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserService;
 
+import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Реализация сервиса для работы с вещами.
@@ -22,9 +30,11 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional(readOnly = true)
 public class ItemServiceImpl implements ItemService {
 
     private final ItemRepository itemRepository;
+    private final CommentRepository commentRepository;
     private final ItemMapper itemMapper;
     private final UserService userService;
 
@@ -36,6 +46,7 @@ public class ItemServiceImpl implements ItemService {
      * @return созданная вещь в формате DTO
      */
     @Override
+    @Transactional
     public ItemResponseDto create(Long ownerId, ItemCreateRequestDto itemCreateRequestDto) {
         log.info("Создание вещи для пользователя {}: {}", ownerId, itemCreateRequestDto);
         // Проверяем существование владельца
@@ -56,6 +67,7 @@ public class ItemServiceImpl implements ItemService {
      * @return обновленная вещь в формате DTO
      */
     @Override
+    @Transactional
     public ItemResponseDto update(Long id, Long ownerId, ItemUpdateRequestDto itemUpdateRequestDto) {
         Item item = getItemOrThrow(id);
 
@@ -87,6 +99,7 @@ public class ItemServiceImpl implements ItemService {
      * @param ownerId идентификатор владельца вещи
      */
     @Override
+    @Transactional
     public void delete(Long id, Long ownerId) {
         Item item = getItemOrThrow(id);
 
@@ -99,18 +112,6 @@ public class ItemServiceImpl implements ItemService {
     }
 
     /**
-     * Находит вещь по идентификатору.
-     *
-     * @param id идентификатор вещи
-     * @return вещь в формате DTO
-     */
-    @Override
-    public ItemResponseDto findById(Long id) {
-        Item item = getItemOrThrow(id);
-        return itemMapper.toResponseDto(item);
-    }
-
-    /**
      * Находит вещь по идентификатору или выбрасывает исключение если не найдена.
      *
      * @param id идентификатор вещи
@@ -120,22 +121,6 @@ public class ItemServiceImpl implements ItemService {
     public Item getItemOrThrow(Long id) {
         return itemRepository.findById(id)
                 .orElseThrow(() -> new ItemNotFound("Вещь с id=" + id + " не найдена"));
-    }
-
-    /**
-     * Находит все вещи владельца.
-     *
-     * @param ownerId идентификатор владельца
-     * @return список вещей владельца
-     */
-    @Override
-    public List<ItemResponseDto> findByOwnerId(Long ownerId) {
-        // Проверяем существование пользователя
-        userService.getUserOrThrow(ownerId);
-
-        return itemRepository.findByOwnerId(ownerId).stream()
-                .map(itemMapper::toResponseDto)
-                .toList();
     }
 
     /**
@@ -155,17 +140,124 @@ public class ItemServiceImpl implements ItemService {
      * Ищет доступные вещи по тексту в названии или описании.
      *
      * @param text текст для поиска
+     * @param from начальная позиция для пагинации
+     * @param size количество элементов на странице
      * @return список найденных вещей
      */
     @Override
-    public List<ItemResponseDto> searchAvailableItems(String text) {
-        log.info("Поиск вещей по тексту: '{}'", text);
-        List<Item> foundItems = itemRepository.searchAvailableItems(text);
-        log.info("Найдено {} вещей", foundItems.size());
-        log.debug("Найденные вещи: {}", foundItems);
+    public List<ItemResponseDto> searchAvailableItems(String text, Integer from, Integer size) {
+        log.info("Поиск вещей по тексту: '{}' с пагинацией from={}, size={}", text, from, size);
 
+        // Если текст пустой или null, возвращаем пустой список
+        if (text == null || text.trim().isEmpty()) {
+            log.info("Пустой текст поиска, возвращаем пустой список");
+            return List.of();
+        }
+
+        List<Item> foundItems = itemRepository.searchAvailableItems(text.trim());
+        log.info("Найдено {} вещей", foundItems.size());
+
+        // Применяем пагинацию
         return foundItems.stream()
+                .skip(from)
+                .limit(size)
                 .map(itemMapper::toResponseDto)
                 .toList();
+    }
+
+    /**
+     * Добавляет комментарий к вещи.
+     *
+     * @param itemId                  идентификатор вещи
+     * @param userId                  идентификатор пользователя
+     * @param commentCreateRequestDto DTO с данными для создания комментария
+     * @return созданный комментарий в формате DTO
+     */
+    @Override
+    @Transactional
+    public CommentResponseDto addComment(Long itemId, Long userId, CommentCreateRequestDto commentCreateRequestDto) {
+        log.info("Добавление комментария к вещи {} пользователем {}", itemId, userId);
+
+        // Проверяем существование пользователя и вещи
+        User author = userService.getUserOrThrow(userId);
+        Item item = getItemOrThrow(itemId);
+
+        // Проверяем, что пользователь брал вещь в аренду и аренда завершена
+        if (!commentRepository.hasUserBookedItemWithCompletedBooking(userId, itemId)) {
+            log.warn("Пользователь {} не имеет завершенного бронирования вещи {}", userId, itemId);
+            throw new CommentNotAllowedException("Пользователь не брал вещь в аренду или аренда не завершена");
+        }
+
+        Comment comment = itemMapper.toCommentEntity(commentCreateRequestDto);
+        comment.setItem(item);
+        comment.setAuthor(author);
+        comment.setCreated(LocalDateTime.now());
+
+        Comment savedComment = commentRepository.save(comment);
+        return itemMapper.toCommentResponseDto(savedComment);
+    }
+
+    /**
+     * Находит вещь по идентификатору.
+     *
+     * @param id идентификатор вещи
+     * @return вещь в формате DTO
+     */
+    @Override
+    public ItemResponseDto findById(Long id) {
+        Item item = getItemOrThrow(id);
+        ItemResponseDto response = itemMapper.toResponseDto(item);
+
+        List<CommentResponseDto> comments = getCommentsForItem(id);
+        response.setComments(comments != null ? comments : Collections.emptyList());
+
+        return response;
+    }
+
+    /**
+     * Находит все вещи владельца с пагинацией.
+     *
+     * @param ownerId идентификатор владельца
+     * @param from    начальная позиция
+     * @param size    количество элементов
+     * @return список вещей владельца
+     */
+    @Override
+    public List<ItemResponseDto> findByOwnerId(Long ownerId, Integer from, Integer size) {
+        log.info("Поиск вещей пользователя {} с пагинацией from={}, size={}", ownerId, from, size);
+
+        // Проверяем существование пользователя
+        userService.getUserOrThrow(ownerId);
+
+        Pageable pageable = PageRequest.of(from / size, size);
+        List<Item> items = itemRepository.findByOwnerId(ownerId);
+        log.info("Найдено {} вещей пользователя {}", items.size(), ownerId);
+
+        // Применяем пагинацию
+        return items.stream()
+                .skip(from)
+                .limit(size)
+                .map(itemMapper::toResponseDto)
+                .toList();
+    }
+
+    /**
+     * Находит все комментарии для вещи
+     *
+     * @param itemId идентификатор вещи
+     * @return список комментариев (never null)
+     */
+    private List<CommentResponseDto> getCommentsForItem(Long itemId) {
+        List<Comment> comments = commentRepository.findByItemId(itemId);
+
+        // Гарантируем, что никогда не возвращаем null
+        if (comments == null) {
+            log.warn("CommentRepository.findByItemId({}) returned null", itemId);
+            return Collections.emptyList();
+        }
+
+        return comments.stream()
+                .map(itemMapper::toCommentResponseDto)
+                .collect(Collectors.toList());
     }
 }

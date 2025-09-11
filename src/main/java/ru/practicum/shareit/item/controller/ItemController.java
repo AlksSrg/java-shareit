@@ -4,9 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.item.dto.ItemCreateRequestDto;
-import ru.practicum.shareit.item.dto.ItemResponseDto;
-import ru.practicum.shareit.item.dto.ItemUpdateRequestDto;
+import ru.practicum.shareit.item.dto.*;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.service.ItemService;
 
@@ -91,20 +89,40 @@ public class ItemController {
     public List<ItemResponseDto> getUsersItems(@RequestHeader("X-Sharer-User-Id") Long ownerId,
                                                @RequestParam(defaultValue = "0") Integer from,
                                                @RequestParam(defaultValue = "10") Integer size) {
-        return itemService.findByOwnerId(ownerId).stream()
-                .skip(from)
-                .limit(size)
-                .toList();
+        return itemService.findByOwnerId(ownerId, from, size);
     }
 
     /**
      * Поиск доступных вещей по тексту.
      *
      * @param text текст для поиска в названии и описании
+     * @param from начальная позиция для пагинации
+     * @param size количество элементов на странице
      * @return список найденных вещей
      */
     @GetMapping("/search")
-    public List<ItemResponseDto> searchItems(@RequestParam String text) {
-        return itemService.searchAvailableItems(text);
+    public List<ItemResponseDto> searchItems(@RequestParam String text,
+                                             @RequestParam(defaultValue = "0") Integer from,
+                                             @RequestParam(defaultValue = "10") Integer size) {
+        // Проверяем, что текст не пустой
+        if (text == null || text.trim().isEmpty()) {
+            return List.of();
+        }
+        return itemService.searchAvailableItems(text, from, size);
+    }
+
+    /**
+     * Добавляет комментарий к вещи.
+     *
+     * @param itemId                   идентификатор вещи
+     * @param userId                   идентификатор пользователя
+     * @param commentCreateRequestDto DTO с данными для создания комментария
+     * @return созданный комментарий в формате DTO
+     */
+    @PostMapping("/{itemId}/comment")
+    public CommentResponseDto addComment(@PathVariable Long itemId,
+                                         @RequestHeader("X-Sharer-User-Id") Long userId,
+                                         @Valid @RequestBody CommentCreateRequestDto commentCreateRequestDto) {
+        return itemService.addComment(itemId, userId, commentCreateRequestDto);
     }
 }

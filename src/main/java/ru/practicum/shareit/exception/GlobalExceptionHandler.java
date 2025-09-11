@@ -4,6 +4,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import ru.practicum.shareit.exception.item.CommentNotAllowedException;
 import ru.practicum.shareit.exception.item.ItemNotFound;
 import ru.practicum.shareit.exception.item.ItemNotOwnedByUserException;
 import ru.practicum.shareit.exception.user.UserNotFound;
@@ -75,5 +76,32 @@ public class GlobalExceptionHandler {
      * @param error сообщение об ошибке
      */
     public record ErrorResponse(String error) {
+    }
+
+    /**
+     * Обрабатывает исключения {@link CommentNotAllowedException}, возникающие когда
+     * пользователь пытается оставить комментарий к вещи, которую не бронировал
+     * или бронирование не завершено.
+     *
+     * @param ex перехваченное исключение
+     * @return структурированный ответ с сообщением об ошибке
+     */
+    @ExceptionHandler(CommentNotAllowedException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleCommentNotAllowed(CommentNotAllowedException ex) {
+        return new ErrorResponse(ex.getMessage());
+    }
+
+    /**
+     * Обрабатывает исключения {@link IllegalArgumentException}, возникающие когда
+     * переданы невалидные аргументы в методы.
+     *
+     * @param ex перехваченное исключение
+     * @return структурированный ответ с сообщением об ошибке
+     */
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleIllegalArgument(IllegalArgumentException ex) {
+        return new ErrorResponse(ex.getMessage());
     }
 }

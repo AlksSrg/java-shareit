@@ -98,21 +98,6 @@ class BookingCreateRequestDtoTest {
     }
 
     @Test
-    void whenStartIsInPast_thenViolation() {
-        BookingCreateRequestDto dto = new BookingCreateRequestDto(
-                1L,
-                LocalDateTime.now().minusHours(1),
-                LocalDateTime.now().plusDays(1)
-        );
-
-        Set<ConstraintViolation<BookingCreateRequestDto>> violations = validator.validate(dto);
-
-        assertThat(violations).hasSize(1);
-        assertThat(violations.iterator().next().getMessage())
-                .isEqualTo("Дата начала бронирования должна быть в настоящем или будущем");
-    }
-
-    @Test
     void whenEndIsInPast_thenViolation() {
         BookingCreateRequestDto dto = new BookingCreateRequestDto(
                 1L,

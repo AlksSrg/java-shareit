@@ -1,11 +1,12 @@
-package ru.practicum.shareit.server;
+package ru.practicum.shareit;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ShareItServerApplication {
+public class ShareItGateway {
     public static void main(String[] args) {
-        SpringApplication.run(ShareItServerApplication.class, args);
+        SpringApplication.run(ShareItGateway.class, args);
     }
+
 }

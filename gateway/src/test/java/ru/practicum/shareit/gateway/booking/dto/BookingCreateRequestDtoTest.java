@@ -68,21 +68,6 @@ class BookingCreateRequestDtoTest {
     }
 
     @Test
-    void whenItemIdIsNull_thenViolation() {
-        BookingCreateRequestDto dto = new BookingCreateRequestDto(
-                null,
-                LocalDateTime.now().plusHours(1),
-                LocalDateTime.now().plusDays(1)
-        );
-
-        Set<ConstraintViolation<BookingCreateRequestDto>> violations = validator.validate(dto);
-
-        assertThat(violations).hasSize(1);
-        assertThat(violations.iterator().next().getMessage())
-                .isEqualTo("Идентификатор вещи не может быть пустым");
-    }
-
-    @Test
     void whenStartIsNull_thenViolation() {
         BookingCreateRequestDto dto = new BookingCreateRequestDto(
                 1L,

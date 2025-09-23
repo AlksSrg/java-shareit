@@ -175,7 +175,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ResponseBody
     public ErrorResponse handleException(Exception ex) {
-        return new ErrorResponse("Произошла внутренняя ошибка сервера");
+        return new ErrorResponse(ex.getMessage());
     }
 
     /**

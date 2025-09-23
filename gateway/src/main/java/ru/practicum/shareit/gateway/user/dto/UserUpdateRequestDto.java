@@ -1,0 +1,27 @@
+package ru.practicum.shareit.gateway.user.dto;
+
+import jakarta.validation.constraints.Email;
+
+/**
+ * DTO для обновления пользователя.
+ * Все поля опциональны для частичного обновления.
+ *
+ * @param name  имя пользователя (опционально)
+ * @param email email пользователя (опционально)
+ */
+public record UserUpdateRequestDto(
+        String name,
+
+        @Email(message = "Некорректный формат email")
+        String email
+) {
+
+    /**
+     * Преобразует DTO обновления в базовый DTO.
+     *
+     * @return базовый DTO пользователя
+     */
+    public UserBaseDto toBaseDto() {
+        return new UserBaseDto(name, email);
+    }
+}

@@ -36,14 +36,7 @@ class ItemRequestDtoJsonTest {
 
     @Test
     void shouldDeserializeFromJson() throws Exception {
-        String json = """
-                {
-                    "id": 1,
-                    "description": "Need a new item",
-                    "created": "2023-01-01T10:00:00",
-                    "items": []
-                }
-                """;
+        String json = "{\"id\":1,\"description\":\"Need a new item\",\"created\":\"2023-01-01T10:00:00\",\"items\":[]}";
 
         ItemRequestDto dto = objectMapper.readValue(json, ItemRequestDto.class);
 
@@ -55,11 +48,7 @@ class ItemRequestDtoJsonTest {
 
     @Test
     void shouldHandleNullValues() throws Exception {
-        String json = """
-                {
-                    "description": "Need a new item"
-                }
-                """;
+        String json = "{\"description\":\"Need a new item\"}";
 
         ItemRequestDto dto = objectMapper.readValue(json, ItemRequestDto.class);
 

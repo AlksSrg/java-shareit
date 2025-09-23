@@ -15,7 +15,7 @@ import java.util.Map;
 public abstract class BaseClient {
     protected final RestTemplate rest;
 
-    @Value("${server.url:http://localhost:9090}")
+    @Value("${shareit-server.url:http://localhost:9090}")
     private String serverUrl;
 
     /**

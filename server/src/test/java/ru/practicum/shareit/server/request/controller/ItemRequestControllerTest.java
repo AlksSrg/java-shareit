@@ -7,8 +7,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.practicum.shareit.server.request.dto.ItemRequestDto;
-import ru.practicum.shareit.server.request.service.RequestService;
+import ru.practicum.shareit.exception.NotFoundException;
+import ru.practicum.shareit.request.controller.ItemRequestController;
+import ru.practicum.shareit.request.dto.ItemRequestDto;
+import ru.practicum.shareit.request.service.RequestService;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -153,7 +155,7 @@ class ItemRequestControllerTest {
         Long requestId = 999L;
 
         when(requestService.getItemRequestById(anyLong(), anyLong()))
-                .thenThrow(new ru.practicum.shareit.server.exception.NotFoundException("Запрос не найден"));
+                .thenThrow(new NotFoundException("Запрос не найден"));
 
         mockMvc.perform(get("/requests/{requestId}", requestId)
                         .header("X-Sharer-User-Id", userId))

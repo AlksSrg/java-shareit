@@ -7,8 +7,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.practicum.shareit.gateway.request.client.ItemRequestClient;
-import ru.practicum.shareit.gateway.request.dto.ItemRequestDto;
+import ru.practicum.shareit.request.client.ItemRequestClient;
+import ru.practicum.shareit.request.controller.ItemRequestController;
+import ru.practicum.shareit.request.dto.ItemRequestDto;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;

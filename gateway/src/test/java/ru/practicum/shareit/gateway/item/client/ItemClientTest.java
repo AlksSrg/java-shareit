@@ -10,10 +10,11 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
-import ru.practicum.shareit.gateway.client.BaseClient;
-import ru.practicum.shareit.gateway.item.dto.CommentCreateRequestDto;
-import ru.practicum.shareit.gateway.item.dto.ItemCreateRequestDto;
-import ru.practicum.shareit.gateway.item.dto.ItemUpdateRequestDto;
+import ru.practicum.shareit.client.BaseClient;
+import ru.practicum.shareit.item.client.ItemClient;
+import ru.practicum.shareit.item.dto.CommentCreateRequestDto;
+import ru.practicum.shareit.item.dto.ItemCreateRequestDto;
+import ru.practicum.shareit.item.dto.ItemUpdateRequestDto;
 
 import java.lang.reflect.Field;
 import java.util.Map;

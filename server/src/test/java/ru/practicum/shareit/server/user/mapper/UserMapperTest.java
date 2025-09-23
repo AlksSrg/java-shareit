@@ -2,9 +2,10 @@ package ru.practicum.shareit.server.user.mapper;
 
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
-import ru.practicum.shareit.server.user.dto.UserResponseDto;
-import ru.practicum.shareit.server.user.dto.UserUpdateRequestDto;
-import ru.practicum.shareit.server.user.model.User;
+import ru.practicum.shareit.user.dto.UserResponseDto;
+import ru.practicum.shareit.user.dto.UserUpdateRequestDto;
+import ru.practicum.shareit.user.mapper.UserMapper;
+import ru.practicum.shareit.user.model.User;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;

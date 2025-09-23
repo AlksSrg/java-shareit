@@ -7,11 +7,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.practicum.shareit.server.exception.item.ItemNotFoundException;
-import ru.practicum.shareit.server.exception.item.ItemNotOwnedByUserException;
-import ru.practicum.shareit.server.item.dto.*;
-import ru.practicum.shareit.server.item.service.ItemService;
-import ru.practicum.shareit.server.user.dto.UserResponseDto;
+import ru.practicum.shareit.exception.item.ItemNotFoundException;
+import ru.practicum.shareit.exception.item.ItemNotOwnedByUserException;
+import ru.practicum.shareit.item.controller.ItemController;
+import ru.practicum.shareit.item.dto.*;
+import ru.practicum.shareit.item.service.ItemService;
+import ru.practicum.shareit.user.dto.UserResponseDto;
 
 import java.util.Collections;
 import java.util.List;

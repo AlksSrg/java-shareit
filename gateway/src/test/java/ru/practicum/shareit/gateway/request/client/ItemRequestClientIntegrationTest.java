@@ -7,7 +7,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpMethod;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestTemplate;
-import ru.practicum.shareit.gateway.request.dto.ItemRequestDto;
+import ru.practicum.shareit.request.client.ItemRequestClient;
+import ru.practicum.shareit.request.dto.ItemRequestDto;
 
 import java.util.Map;
 

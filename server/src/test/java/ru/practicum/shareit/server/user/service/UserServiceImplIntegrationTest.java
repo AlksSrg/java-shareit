@@ -5,11 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.shareit.server.exception.user.EmailAlreadyExistsException;
-import ru.practicum.shareit.server.exception.user.UserNotFoundException;
-import ru.practicum.shareit.server.user.dto.UserCreateRequestDto;
-import ru.practicum.shareit.server.user.dto.UserResponseDto;
-import ru.practicum.shareit.server.user.dto.UserUpdateRequestDto;
+import ru.practicum.shareit.exception.user.EmailAlreadyExistsException;
+import ru.practicum.shareit.exception.user.UserNotFoundException;
+import ru.practicum.shareit.user.dto.UserCreateRequestDto;
+import ru.practicum.shareit.user.dto.UserResponseDto;
+import ru.practicum.shareit.user.dto.UserUpdateRequestDto;
+import ru.practicum.shareit.user.service.UserService;
 
 import java.util.List;
 

@@ -2,10 +2,11 @@ package ru.practicum.shareit.server.item.mapper;
 
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
-import ru.practicum.shareit.server.item.dto.*;
-import ru.practicum.shareit.server.item.model.Comment;
-import ru.practicum.shareit.server.item.model.Item;
-import ru.practicum.shareit.server.user.model.User;
+import ru.practicum.shareit.item.dto.*;
+import ru.practicum.shareit.item.mapper.ItemMapper;
+import ru.practicum.shareit.item.model.Comment;
+import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.user.model.User;
 
 import java.time.LocalDateTime;
 

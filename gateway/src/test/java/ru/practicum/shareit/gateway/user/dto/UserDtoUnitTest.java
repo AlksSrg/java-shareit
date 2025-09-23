@@ -1,6 +1,10 @@
 package ru.practicum.shareit.gateway.user.dto;
 
 import org.junit.jupiter.api.Test;
+import ru.practicum.shareit.user.dto.UserBaseDto;
+import ru.practicum.shareit.user.dto.UserCreateRequestDto;
+import ru.practicum.shareit.user.dto.UserResponseDto;
+import ru.practicum.shareit.user.dto.UserUpdateRequestDto;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

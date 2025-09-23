@@ -8,12 +8,13 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.practicum.shareit.server.exception.user.EmailAlreadyExistsException;
-import ru.practicum.shareit.server.exception.user.UserNotFoundException;
-import ru.practicum.shareit.server.user.dto.UserCreateRequestDto;
-import ru.practicum.shareit.server.user.dto.UserResponseDto;
-import ru.practicum.shareit.server.user.dto.UserUpdateRequestDto;
-import ru.practicum.shareit.server.user.service.UserService;
+import ru.practicum.shareit.exception.user.EmailAlreadyExistsException;
+import ru.practicum.shareit.exception.user.UserNotFoundException;
+import ru.practicum.shareit.user.controller.UserController;
+import ru.practicum.shareit.user.dto.UserCreateRequestDto;
+import ru.practicum.shareit.user.dto.UserResponseDto;
+import ru.practicum.shareit.user.dto.UserUpdateRequestDto;
+import ru.practicum.shareit.user.service.UserService;
 
 import java.util.List;
 

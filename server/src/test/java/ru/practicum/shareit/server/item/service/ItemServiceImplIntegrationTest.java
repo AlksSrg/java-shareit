@@ -5,10 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
-import ru.practicum.shareit.server.exception.item.CommentNotAllowedException;
-import ru.practicum.shareit.server.exception.item.ItemNotFoundException;
-import ru.practicum.shareit.server.exception.item.ItemNotOwnedByUserException;
-import ru.practicum.shareit.server.item.dto.*;
+import ru.practicum.shareit.exception.item.CommentNotAllowedException;
+import ru.practicum.shareit.exception.item.ItemNotFoundException;
+import ru.practicum.shareit.exception.item.ItemNotOwnedByUserException;
+import ru.practicum.shareit.exception.user.UserNotFoundException;
+import ru.practicum.shareit.item.dto.*;
+import ru.practicum.shareit.item.service.ItemService;
 
 import java.util.List;
 
@@ -52,7 +54,7 @@ class ItemServiceImplIntegrationTest {
         Integer from = 0;
         Integer size = 10;
 
-        assertThrows(ru.practicum.shareit.server.exception.user.UserNotFoundException.class, () -> {
+        assertThrows(UserNotFoundException.class, () -> {
             itemService.findByOwnerId(nonExistentOwnerId, from, size);
         });
     }

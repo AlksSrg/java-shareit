@@ -11,11 +11,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import ru.practicum.shareit.gateway.exception.GlobalExceptionHandler;
-import ru.practicum.shareit.gateway.item.client.ItemClient;
-import ru.practicum.shareit.gateway.item.dto.CommentCreateRequestDto;
-import ru.practicum.shareit.gateway.item.dto.ItemCreateRequestDto;
-import ru.practicum.shareit.gateway.item.dto.ItemUpdateRequestDto;
+import ru.practicum.shareit.exception.GlobalExceptionHandler;
+import ru.practicum.shareit.item.client.ItemClient;
+import ru.practicum.shareit.item.controller.ItemController;
+import ru.practicum.shareit.item.dto.CommentCreateRequestDto;
+import ru.practicum.shareit.item.dto.ItemCreateRequestDto;
+import ru.practicum.shareit.item.dto.ItemUpdateRequestDto;
 
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;

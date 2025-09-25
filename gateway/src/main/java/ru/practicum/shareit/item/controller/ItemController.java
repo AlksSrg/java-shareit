@@ -5,7 +5,6 @@ import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.client.ItemClient;
@@ -22,7 +21,7 @@ import java.util.Collections;
  */
 @Validated
 @RequiredArgsConstructor
-@Controller
+@RestController
 @RequestMapping("/items")
 public class ItemController {
 

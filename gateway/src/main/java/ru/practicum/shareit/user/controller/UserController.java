@@ -3,7 +3,6 @@ package ru.practicum.shareit.user.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.user.client.UserClient;
 import ru.practicum.shareit.user.dto.UserCreateRequestDto;
@@ -15,7 +14,7 @@ import ru.practicum.shareit.user.dto.UserUpdateRequestDto;
  * Выполняет валидацию входных данных и проксирует запросы на основной сервер.
  */
 @RequiredArgsConstructor
-@Controller
+@RestController
 @RequestMapping(path = "/users")
 public class UserController {
 

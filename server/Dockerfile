@@ -1,4 +1,4 @@
-FROM eclipse-temurin:21.0.4_9-jre-jammy
+FROM openjdk:21-jre-slim
 VOLUME /tmp
 ARG JAR_FILE=target/server-*.jar
 COPY ${JAR_FILE} app.jar

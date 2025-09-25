@@ -45,7 +45,7 @@ class ItemClientTest {
     void create_ShouldCallPostWithCorrectParameters() {
         Long ownerId = 1L;
         ItemCreateRequestDto request = new ItemCreateRequestDto("Item", "Description", true, null);
-        ResponseEntity<Object> expectedResponse = ResponseEntity.ok().build();
+        ResponseEntity<Object> expectedResponse = ResponseEntity.ok(new Object());
 
         when(restTemplate.exchange(
                 eq("http://localhost:9090/items"),
@@ -54,7 +54,7 @@ class ItemClientTest {
                 eq(Object.class)
         )).thenReturn(expectedResponse);
 
-        ResponseEntity<Object> response = itemClient.create(ownerId, request);
+        Object response = itemClient.create(ownerId, request);
 
         assertNotNull(response);
         verify(restTemplate).exchange(
@@ -75,7 +75,7 @@ class ItemClientTest {
         Long itemId = 1L;
         Long ownerId = 1L;
         ItemUpdateRequestDto request = new ItemUpdateRequestDto("Updated", "New description", true);
-        ResponseEntity<Object> expectedResponse = ResponseEntity.ok().build();
+        ResponseEntity<Object> expectedResponse = ResponseEntity.ok(new Object());
 
         when(restTemplate.exchange(
                 eq("http://localhost:9090/items/1"),
@@ -84,7 +84,7 @@ class ItemClientTest {
                 eq(Object.class)
         )).thenReturn(expectedResponse);
 
-        ResponseEntity<Object> response = itemClient.update(itemId, ownerId, request);
+        Object response = itemClient.update(itemId, ownerId, request);
 
         assertNotNull(response);
         verify(restTemplate).exchange(
@@ -104,7 +104,7 @@ class ItemClientTest {
     void delete_ShouldCallDeleteWithCorrectParameters() {
         Long itemId = 1L;
         Long ownerId = 1L;
-        ResponseEntity<Object> expectedResponse = ResponseEntity.ok().build();
+        ResponseEntity<Object> expectedResponse = ResponseEntity.ok(new Object());
 
         when(restTemplate.exchange(
                 eq("http://localhost:9090/items/1"),
@@ -113,7 +113,7 @@ class ItemClientTest {
                 eq(Object.class)
         )).thenReturn(expectedResponse);
 
-        ResponseEntity<Object> response = itemClient.delete(itemId, ownerId);
+        Object response = itemClient.delete(itemId, ownerId);
 
         assertNotNull(response);
         verify(restTemplate).exchange(
@@ -131,7 +131,7 @@ class ItemClientTest {
     @Test
     void findById_ShouldCallGetWithCorrectParameters() {
         Long itemId = 1L;
-        ResponseEntity<Object> expectedResponse = ResponseEntity.ok().build();
+        ResponseEntity<Object> expectedResponse = ResponseEntity.ok(new Object());
 
         when(restTemplate.exchange(
                 eq("http://localhost:9090/items/1"),
@@ -140,7 +140,7 @@ class ItemClientTest {
                 eq(Object.class)
         )).thenReturn(expectedResponse);
 
-        ResponseEntity<Object> response = itemClient.findById(itemId);
+        Object response = itemClient.findById(itemId);
 
         assertNotNull(response);
         verify(restTemplate).exchange(
@@ -156,7 +156,7 @@ class ItemClientTest {
         Long ownerId = 1L;
         Integer from = 0;
         Integer size = 10;
-        ResponseEntity<Object> expectedResponse = ResponseEntity.ok().build();
+        ResponseEntity<Object> expectedResponse = ResponseEntity.ok(new Object());
 
         when(restTemplate.exchange(
                 eq("http://localhost:9090/items?from={from}&size={size}"),
@@ -166,7 +166,7 @@ class ItemClientTest {
                 eq(Map.of("from", 0, "size", 10))
         )).thenReturn(expectedResponse);
 
-        ResponseEntity<Object> response = itemClient.findByOwnerId(ownerId, from, size);
+        Object response = itemClient.findByOwnerId(ownerId, from, size);
 
         assertNotNull(response);
         verify(restTemplate).exchange(
@@ -187,7 +187,7 @@ class ItemClientTest {
         String text = "test";
         Integer from = 0;
         Integer size = 10;
-        ResponseEntity<Object> expectedResponse = ResponseEntity.ok().build();
+        ResponseEntity<Object> expectedResponse = ResponseEntity.ok(new Object());
 
         when(restTemplate.exchange(
                 eq("http://localhost:9090/items/search?text={text}&from={from}&size={size}"),
@@ -197,7 +197,7 @@ class ItemClientTest {
                 eq(Map.of("text", "test", "from", 0, "size", 10))
         )).thenReturn(expectedResponse);
 
-        ResponseEntity<Object> response = itemClient.searchAvailableItems(text, from, size);
+        Object response = itemClient.searchAvailableItems(text, from, size);
 
         assertNotNull(response);
         verify(restTemplate).exchange(
@@ -214,7 +214,7 @@ class ItemClientTest {
         Long itemId = 1L;
         Long userId = 1L;
         CommentCreateRequestDto request = new CommentCreateRequestDto("Great item!");
-        ResponseEntity<Object> expectedResponse = ResponseEntity.ok().build();
+        ResponseEntity<Object> expectedResponse = ResponseEntity.ok(new Object());
 
         when(restTemplate.exchange(
                 eq("http://localhost:9090/items/1/comment"),
@@ -223,7 +223,7 @@ class ItemClientTest {
                 eq(Object.class)
         )).thenReturn(expectedResponse);
 
-        ResponseEntity<Object> response = itemClient.addComment(itemId, userId, request);
+        Object response = itemClient.addComment(itemId, userId, request);
 
         assertNotNull(response);
         verify(restTemplate).exchange(

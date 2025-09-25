@@ -49,14 +49,14 @@ class BookingServiceImplIntegrationTest {
         BookingResponseDto result = bookingService.create(2L, request);
 
         assertThat(result).isNotNull();
-        assertThat(result.getId()).isNotNull();
-        assertThat(result.getItem()).isNotNull();
-        assertThat(result.getItem().getId()).isEqualTo(3L);
-        assertThat(result.getBooker()).isNotNull();
-        assertThat(result.getBooker().id()).isEqualTo(2L);
-        assertThat(result.getStatus()).isEqualTo(BookingStatus.WAITING);
+        assertThat(result.id()).isNotNull();
+        assertThat(result.item()).isNotNull();
+        assertThat(result.item().id()).isEqualTo(3L);
+        assertThat(result.booker()).isNotNull();
+        assertThat(result.booker().id()).isEqualTo(2L);
+        assertThat(result.status()).isEqualTo(BookingStatus.WAITING);
 
-        createdBookingId = result.getId();
+        createdBookingId = result.id();
     }
 
     @Test
@@ -120,10 +120,10 @@ class BookingServiceImplIntegrationTest {
         );
         BookingResponseDto created = bookingService.create(2L, request);
 
-        BookingResponseDto result = bookingService.updateStatus(1L, created.getId(), true);
+        BookingResponseDto result = bookingService.updateStatus(1L, created.id(), true);
 
         assertThat(result).isNotNull();
-        assertThat(result.getStatus()).isEqualTo(BookingStatus.APPROVED);
+        assertThat(result.status()).isEqualTo(BookingStatus.APPROVED);
     }
 
     @Test
@@ -135,10 +135,10 @@ class BookingServiceImplIntegrationTest {
         );
         BookingResponseDto created = bookingService.create(2L, request);
 
-        BookingResponseDto result = bookingService.updateStatus(1L, created.getId(), false);
+        BookingResponseDto result = bookingService.updateStatus(1L, created.id(), false);
 
         assertThat(result).isNotNull();
-        assertThat(result.getStatus()).isEqualTo(BookingStatus.REJECTED);
+        assertThat(result.status()).isEqualTo(BookingStatus.REJECTED);
     }
 
     @Test
@@ -151,7 +151,7 @@ class BookingServiceImplIntegrationTest {
         BookingResponseDto created = bookingService.create(2L, request);
 
         assertThrows(BookingNotOwnedException.class, () ->
-                bookingService.updateStatus(3L, created.getId(), true)
+                bookingService.updateStatus(3L, created.id(), true)
         );
     }
 
@@ -164,10 +164,10 @@ class BookingServiceImplIntegrationTest {
         );
         BookingResponseDto created = bookingService.create(2L, request);
 
-        bookingService.updateStatus(1L, created.getId(), true);
+        bookingService.updateStatus(1L, created.id(), true);
 
         assertThrows(BookingStatusAlreadySetException.class, () ->
-                bookingService.updateStatus(1L, created.getId(), false)
+                bookingService.updateStatus(1L, created.id(), false)
         );
     }
 
@@ -175,11 +175,11 @@ class BookingServiceImplIntegrationTest {
     void findById_shouldReturnBooking() {
         BookingResponseDto result = bookingService.findById(1L, 1L);
         assertThat(result).isNotNull();
-        assertThat(result.getId()).isEqualTo(1L);
+        assertThat(result.id()).isEqualTo(1L);
 
         BookingResponseDto result2 = bookingService.findById(2L, 1L);
         assertThat(result2).isNotNull();
-        assertThat(result2.getId()).isEqualTo(1L);
+        assertThat(result2.id()).isEqualTo(1L);
     }
 
     @Test
@@ -196,7 +196,7 @@ class BookingServiceImplIntegrationTest {
         );
 
         assertThat(result).isNotEmpty();
-        assertThat(result).allMatch(booking -> booking.getBooker().id().equals(2L));
+        assertThat(result).allMatch(booking -> booking.booker().id().equals(2L));
     }
 
     @Test
@@ -206,7 +206,7 @@ class BookingServiceImplIntegrationTest {
         );
 
         assertThat(result).isNotEmpty();
-        assertThat(result).allMatch(booking -> booking.getItem().getOwner().id().equals(1L));
+        assertThat(result).allMatch(booking -> booking.item().owner().id().equals(1L));
     }
 
     @Test
@@ -301,12 +301,12 @@ class BookingServiceImplIntegrationTest {
                 2L, BookingStatus.WAITING, 0, 10
         );
         assertThat(waitingResult).isNotEmpty();
-        assertThat(waitingResult).anyMatch(booking -> booking.getId().equals(created.getId()));
+        assertThat(waitingResult).anyMatch(booking -> booking.id().equals(created.id()));
 
         List<BookingResponseDto> ownerWaitingResult = bookingService.findByOwnerId(
                 1L, BookingStatus.WAITING, 0, 10
         );
         assertThat(ownerWaitingResult).isNotEmpty();
-        assertThat(ownerWaitingResult).anyMatch(booking -> booking.getId().equals(created.getId()));
+        assertThat(ownerWaitingResult).anyMatch(booking -> booking.id().equals(created.id()));
     }
 }

@@ -73,12 +73,12 @@ class RequestServiceImplIntegrationTest {
         ItemRequestDto createdRequest = requestService.createItemRequest(requestDto, userId);
 
         assertNotNull(createdRequest, "Созданный запрос не должен быть null");
-        assertNotNull(createdRequest.getId(), "ID созданного запроса не должен быть null");
-        assertEquals(requestDto.getDescription(), createdRequest.getDescription(), "Описание должно совпадать");
-        assertNotNull(createdRequest.getCreated(), "Дата создания не должна быть null");
+        assertNotNull(createdRequest.id(), "ID созданного запроса не должен быть null");
+        assertEquals(requestDto.description(), createdRequest.description(), "Описание должно совпадать");
+        assertNotNull(createdRequest.created(), "Дата создания не должна быть null");
 
-        if (createdRequest.getItems() != null) {
-            assertTrue(createdRequest.getItems().isEmpty(), "Список items должен быть пустым для нового запроса");
+        if (createdRequest.items() != null) {
+            assertTrue(createdRequest.items().isEmpty(), "Список items должен быть пустым для нового запроса");
         }
     }
 
@@ -105,10 +105,10 @@ class RequestServiceImplIntegrationTest {
 
         boolean allRequestsBelongToUser = requests.stream()
                 .allMatch(request -> {
-                    assertNotNull(request.getId(), "ID запроса не должен быть null");
-                    assertNotNull(request.getDescription(), "Описание запроса не должно быть null");
-                    assertNotNull(request.getCreated(), "Дата создания не должна быть null");
-                    assertNotNull(request.getItems(), "Список items не должен быть null");
+                    assertNotNull(request.id(), "ID запроса не должен быть null");
+                    assertNotNull(request.description(), "Описание запроса не должно быть null");
+                    assertNotNull(request.created(), "Дата создания не должна быть null");
+                    assertNotNull(request.items(), "Список items не должен быть null");
                     return true;
                 });
         assertTrue(allRequestsBelongToUser, "Все запросы должны принадлежать пользователю");
@@ -145,13 +145,13 @@ class RequestServiceImplIntegrationTest {
 
         if (!requests.isEmpty()) {
             ItemRequestDto otherUserRequest = requests.getFirst();
-            assertNotNull(otherUserRequest.getId(), "ID запроса не должен быть null");
-            assertNotNull(otherUserRequest.getDescription(), "Описание запроса не должно быть null");
-            assertNotNull(otherUserRequest.getCreated(), "Дата создания не должна быть null");
-            assertNotNull(otherUserRequest.getItems(), "Список items не должен быть null");
+            assertNotNull(otherUserRequest.id(), "ID запроса не должен быть null");
+            assertNotNull(otherUserRequest.description(), "Описание запроса не должно быть null");
+            assertNotNull(otherUserRequest.created(), "Дата создания не должна быть null");
+            assertNotNull(otherUserRequest.items(), "Список items не должен быть null");
 
-            assertTrue(otherUserRequest.getDescription().contains("user 2") ||
-                    otherUserRequest.getDescription().contains("Test request from user 2"));
+            assertTrue(otherUserRequest.description().contains("user 2") ||
+                    otherUserRequest.description().contains("Test request from user 2"));
         }
     }
 
@@ -213,10 +213,10 @@ class RequestServiceImplIntegrationTest {
         ItemRequestDto foundRequest = requestService.getItemRequestById(existingRequestId, userId);
 
         assertNotNull(foundRequest, "Найденный запрос не должен быть null");
-        assertEquals(existingRequestId, foundRequest.getId(), "ID запроса должен совпадать");
-        assertEquals("Test request from user 1", foundRequest.getDescription(), "Описание должно совпадать");
-        assertNotNull(foundRequest.getCreated(), "Дата создания не должна быть null");
-        assertNotNull(foundRequest.getItems(), "Список items не должен быть null");
+        assertEquals(existingRequestId, foundRequest.id(), "ID запроса должен совпадать");
+        assertEquals("Test request from user 1", foundRequest.description(), "Описание должно совпадать");
+        assertNotNull(foundRequest.created(), "Дата создания не должна быть null");
+        assertNotNull(foundRequest.items(), "Список items не должен быть null");
     }
 
     @Test
@@ -247,7 +247,7 @@ class RequestServiceImplIntegrationTest {
         ItemRequestDto foundRequest = requestService.getItemRequestById(existingRequestId, userId);
 
         assertNotNull(foundRequest, "Найденный запрос не должен быть null");
-        assertEquals(existingRequestId, foundRequest.getId(), "ID запроса должен совпадать");
-        assertEquals("Test request from user 1", foundRequest.getDescription(), "Описание должно совпадать");
+        assertEquals(existingRequestId, foundRequest.id(), "ID запроса должен совпадать");
+        assertEquals("Test request from user 1", foundRequest.description(), "Описание должно совпадать");
     }
 }

@@ -18,7 +18,6 @@ class ItemMapperTest {
 
     @Test
     void toEntity_shouldConvertCreateRequestDtoToEntity() {
-
         ItemCreateRequestDto dto = new ItemCreateRequestDto(
                 "Test Item", "Test Description", true, 1L);
 
@@ -53,15 +52,15 @@ class ItemMapperTest {
         ItemResponseDto dto = itemMapper.toResponseDto(item);
 
         assertThat(dto).isNotNull();
-        assertThat(dto.getId()).isEqualTo(1L);
-        assertThat(dto.getName()).isEqualTo("Test Item");
-        assertThat(dto.getDescription()).isEqualTo("Test Description");
-        assertThat(dto.getAvailable()).isTrue();
-        assertThat(dto.getRequestId()).isEqualTo(1L);
-        assertThat(dto.getOwner()).isNotNull();
-        assertThat(dto.getComments()).isNull();
-        assertThat(dto.getLastBooking()).isNull();
-        assertThat(dto.getNextBooking()).isNull();
+        assertThat(dto.id()).isEqualTo(1L);
+        assertThat(dto.name()).isEqualTo("Test Item");
+        assertThat(dto.description()).isEqualTo("Test Description");
+        assertThat(dto.available()).isTrue();
+        assertThat(dto.requestId()).isEqualTo(1L);
+        assertThat(dto.owner()).isNotNull();
+        assertThat(dto.comments()).isNull();
+        assertThat(dto.lastBooking()).isNull();
+        assertThat(dto.nextBooking()).isNull();
     }
 
     @Test

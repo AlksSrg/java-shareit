@@ -3,6 +3,7 @@ package ru.practicum.shareit.user.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.user.client.UserClient;
 import ru.practicum.shareit.user.dto.UserCreateRequestDto;
@@ -14,7 +15,7 @@ import ru.practicum.shareit.user.dto.UserUpdateRequestDto;
  * Выполняет валидацию входных данных и проксирует запросы на основной сервер.
  */
 @RequiredArgsConstructor
-@RestController
+@Controller
 @RequestMapping(path = "/users")
 public class UserController {
 
@@ -24,7 +25,7 @@ public class UserController {
      * Создает нового пользователя.
      *
      * @param userCreateRequestDto DTO с данными для создания пользователя
-     * @return ResponseEntity с созданным пользователем
+     * @return созданный пользователь
      */
     @PostMapping
     public ResponseEntity<Object> createUser(@Valid @RequestBody UserCreateRequestDto userCreateRequestDto) {
@@ -36,7 +37,7 @@ public class UserController {
      *
      * @param id                   идентификатор пользователя для обновления
      * @param userUpdateRequestDto DTO с данными для обновления
-     * @return ResponseEntity с обновленным пользователем
+     * @return обновленный пользователь
      */
     @PatchMapping("/{id}")
     public ResponseEntity<Object> updateUser(@PathVariable Long id,
@@ -48,7 +49,7 @@ public class UserController {
      * Удаляет пользователя по идентификатору.
      *
      * @param id идентификатор пользователя для удаления
-     * @return ResponseEntity со статусом операции удаления
+     * @return статус операции удаления
      */
     @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteUser(@PathVariable Long id) {
@@ -59,7 +60,7 @@ public class UserController {
      * Получает пользователя по идентификатору.
      *
      * @param id идентификатор пользователя
-     * @return ResponseEntity с информацией о пользователе
+     * @return информация о пользователе
      */
     @GetMapping("/{id}")
     public ResponseEntity<Object> getUser(@PathVariable Long id) {
@@ -69,7 +70,7 @@ public class UserController {
     /**
      * Получает всех пользователей.
      *
-     * @return ResponseEntity со списком всех пользователей
+     * @return список всех пользователей
      */
     @GetMapping
     public ResponseEntity<Object> getAllUsers() {

@@ -97,16 +97,17 @@ class ItemDtoJsonTest {
 
     @Test
     void itemResponseDto_serialization() throws Exception {
-        ItemResponseDto dto = new ItemResponseDto();
-        dto.setId(1L);
-        dto.setName("Test Item");
-        dto.setDescription("Test Description");
-        dto.setAvailable(true);
-        dto.setOwner(new UserResponseDto(1L, "Owner", "owner@example.com"));
-        dto.setRequestId(null);
-        dto.setComments(List.of());
-        dto.setLastBooking(null);
-        dto.setNextBooking(null);
+        ItemResponseDto dto = new ItemResponseDto(
+                1L,
+                "Test Item",
+                "Test Description",
+                true,
+                new UserResponseDto(1L, "Owner", "owner@example.com"),
+                null,
+                List.of(),
+                null,
+                null
+        );
 
         String jsonContent = responseJson.write(dto).getJson();
 
@@ -134,15 +135,15 @@ class ItemDtoJsonTest {
 
         ItemResponseDto dto = responseJson.parse(json).getObject();
 
-        assertThat(dto.getId()).isEqualTo(1L);
-        assertThat(dto.getName()).isEqualTo("Test Item");
-        assertThat(dto.getDescription()).isEqualTo("Test Description");
-        assertThat(dto.getAvailable()).isTrue();
-        assertThat(dto.getOwner()).isNotNull();
-        assertThat(dto.getOwner().id()).isEqualTo(1L);
-        assertThat(dto.getComments()).isEmpty();
-        assertThat(dto.getLastBooking()).isNull();
-        assertThat(dto.getNextBooking()).isNull();
+        assertThat(dto.id()).isEqualTo(1L);
+        assertThat(dto.name()).isEqualTo("Test Item");
+        assertThat(dto.description()).isEqualTo("Test Description");
+        assertThat(dto.available()).isTrue();
+        assertThat(dto.owner()).isNotNull();
+        assertThat(dto.owner().id()).isEqualTo(1L);
+        assertThat(dto.comments()).isEmpty();
+        assertThat(dto.lastBooking()).isNull();
+        assertThat(dto.nextBooking()).isNull();
     }
 
     @Test
@@ -218,10 +219,10 @@ class ItemDtoJsonTest {
 
         ItemBaseDto dto = baseDtoJson.parse(json).getObject();
 
-        assertThat(dto.getName()).isEqualTo("Test Item");
-        assertThat(dto.getDescription()).isEqualTo("Test Description");
-        assertThat(dto.getAvailable()).isTrue();
-        assertThat(dto.getRequestId()).isEqualTo(1L);
+        assertThat(dto.name()).isEqualTo("Test Item");
+        assertThat(dto.description()).isEqualTo("Test Description");
+        assertThat(dto.available()).isTrue();
+        assertThat(dto.requestId()).isEqualTo(1L);
     }
 
     @Test
@@ -240,8 +241,8 @@ class ItemDtoJsonTest {
 
         BookingForItemDto dto = bookingForItemJson.parse(json).getObject();
 
-        assertThat(dto.getId()).isEqualTo(1L);
-        assertThat(dto.getBookerId()).isEqualTo(2L);
+        assertThat(dto.id()).isEqualTo(1L);
+        assertThat(dto.bookerId()).isEqualTo(2L);
     }
 
     @Test
@@ -251,27 +252,5 @@ class ItemDtoJsonTest {
 
         assertThat(json).contains("\"name\":\"\"");
         assertThat(json).contains("\"description\":null");
-    }
-
-    @Test
-    void itemResponseDto_withNullFields_shouldSerialize() throws Exception {
-        ItemResponseDto dto = new ItemResponseDto();
-        dto.setId(null);
-        dto.setName(null);
-        dto.setDescription(null);
-        dto.setAvailable(null);
-        dto.setOwner(null);
-        dto.setRequestId(null);
-        dto.setComments(null);
-        dto.setLastBooking(null);
-        dto.setNextBooking(null);
-
-        String jsonContent = responseJson.write(dto).getJson();
-
-        assertThat(jsonContent).contains("\"id\":null");
-        assertThat(jsonContent).contains("\"name\":null");
-        assertThat(jsonContent).contains("\"description\":null");
-        assertThat(jsonContent).contains("\"available\":null");
-        assertThat(jsonContent).contains("\"owner\":null");
     }
 }

@@ -5,12 +5,15 @@ import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.client.ItemClient;
 import ru.practicum.shareit.item.dto.CommentCreateRequestDto;
 import ru.practicum.shareit.item.dto.ItemCreateRequestDto;
 import ru.practicum.shareit.item.dto.ItemUpdateRequestDto;
+
+import java.util.Collections;
 
 /**
  * Контроллер для работы с вещами на gateway.
@@ -19,14 +22,14 @@ import ru.practicum.shareit.item.dto.ItemUpdateRequestDto;
  */
 @Validated
 @RequiredArgsConstructor
-@RestController
+@Controller
 @RequestMapping("/items")
 public class ItemController {
 
     private final ItemClient itemClient;
 
     /**
-     * Создание новой вещи.
+     * Создает новую вещь.
      *
      * @param ownerId              идентификатор владельца вещи
      * @param itemCreateRequestDto DTO с данными для создания вещи
@@ -39,7 +42,7 @@ public class ItemController {
     }
 
     /**
-     * Обновление существующей вещи.
+     * Обновляет существующую вещь.
      *
      * @param id                   идентификатор вещи
      * @param ownerId              идентификатор владельца вещи
@@ -54,7 +57,7 @@ public class ItemController {
     }
 
     /**
-     * Удаление вещи по идентификатору.
+     * Удаляет вещь по идентификатору.
      *
      * @param id      идентификатор вещи
      * @param ownerId идентификатор владельца вещи
@@ -67,10 +70,10 @@ public class ItemController {
     }
 
     /**
-     * Получение вещи по идентификатору.
+     * Получает вещь по идентификатору.
      *
      * @param id идентификатор вещи
-     * @return вещь
+     * @return информация о вещи
      */
     @GetMapping("/{id}")
     public ResponseEntity<Object> getItem(@PathVariable Long id) {
@@ -78,7 +81,7 @@ public class ItemController {
     }
 
     /**
-     * Получение списка вещей пользователя с пагинацией.
+     * Получает список вещей пользователя с пагинацией.
      *
      * @param ownerId идентификатор владельца вещей
      * @param from    начальная позиция для пагинации
@@ -93,20 +96,20 @@ public class ItemController {
     }
 
     /**
-     * Поиск доступных вещей по тексту.
+     * Ищет доступные вещи по тексту.
+     * Если текст пустой или состоит только из пробелов, возвращается пустой список.
      *
      * @param text текст для поиска в названии и описании
      * @param from начальная позиция для пагинации
      * @param size количество элементов на странице
-     * @return список найденных вещей
+     * @return список найденных вещей (пустой список если текст для поиска отсутствует)
      */
     @GetMapping("/search")
     public ResponseEntity<Object> searchItems(@RequestParam String text,
                                               @RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
                                               @RequestParam(defaultValue = "10") @Positive Integer size) {
-        // Проверяем, что текст не пустой
         if (text == null || text.trim().isEmpty()) {
-            return ResponseEntity.ok().body("[]");
+            return ResponseEntity.ok(Collections.emptyList());
         }
         return itemClient.searchAvailableItems(text, from, size);
     }

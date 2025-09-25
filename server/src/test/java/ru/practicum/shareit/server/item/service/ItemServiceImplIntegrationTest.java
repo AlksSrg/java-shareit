@@ -34,7 +34,7 @@ class ItemServiceImplIntegrationTest {
         List<ItemResponseDto> items = itemService.findByOwnerId(ownerId, from, size);
 
         assertThat(items).isNotEmpty();
-        assertThat(items).allMatch(item -> item.getOwner().id().equals(ownerId));
+        assertThat(items).allMatch(item -> item.owner().id().equals(ownerId));
     }
 
     @Test
@@ -68,11 +68,11 @@ class ItemServiceImplIntegrationTest {
         ItemResponseDto createdItem = itemService.create(ownerId, createDto);
 
         assertThat(createdItem).isNotNull();
-        assertThat(createdItem.getId()).isNotNull();
-        assertThat(createdItem.getName()).isEqualTo("New Item");
-        assertThat(createdItem.getDescription()).isEqualTo("New Description");
-        assertThat(createdItem.getAvailable()).isTrue();
-        assertThat(createdItem.getOwner().id()).isEqualTo(ownerId);
+        assertThat(createdItem.id()).isNotNull();
+        assertThat(createdItem.name()).isEqualTo("New Item");
+        assertThat(createdItem.description()).isEqualTo("New Description");
+        assertThat(createdItem.available()).isTrue();
+        assertThat(createdItem.owner().id()).isEqualTo(ownerId);
     }
 
     @Test
@@ -85,7 +85,7 @@ class ItemServiceImplIntegrationTest {
         ItemResponseDto createdItem = itemService.create(ownerId, createDto);
 
         assertThat(createdItem).isNotNull();
-        assertThat(createdItem.getRequestId()).isEqualTo(requestId);
+        assertThat(createdItem.requestId()).isEqualTo(requestId);
     }
 
     @Test
@@ -98,9 +98,9 @@ class ItemServiceImplIntegrationTest {
         ItemResponseDto updatedItem = itemService.update(itemId, ownerId, updateDto);
 
         assertThat(updatedItem).isNotNull();
-        assertThat(updatedItem.getName()).isEqualTo("Updated Name");
-        assertThat(updatedItem.getDescription()).isEqualTo("Updated Description");
-        assertThat(updatedItem.getAvailable()).isFalse();
+        assertThat(updatedItem.name()).isEqualTo("Updated Name");
+        assertThat(updatedItem.description()).isEqualTo("Updated Description");
+        assertThat(updatedItem.available()).isFalse();
     }
 
     @Test
@@ -121,8 +121,8 @@ class ItemServiceImplIntegrationTest {
         ItemResponseDto item = itemService.findById(itemId);
 
         assertThat(item).isNotNull();
-        assertThat(item.getId()).isEqualTo(itemId);
-        assertThat(item.getComments()).isNotEmpty();
+        assertThat(item.id()).isEqualTo(itemId);
+        assertThat(item.comments()).isNotEmpty();
     }
 
     @Test
@@ -142,10 +142,10 @@ class ItemServiceImplIntegrationTest {
         List<ItemResponseDto> items = itemService.searchAvailableItems(searchText, from, size);
 
         assertThat(items).isNotEmpty();
-        assertThat(items).allMatch(ItemResponseDto::getAvailable);
+        assertThat(items).allMatch(ItemResponseDto::available);
         assertThat(items).allMatch(item ->
-                item.getName().toLowerCase().contains("laptop") ||
-                        item.getDescription().toLowerCase().contains("laptop"));
+                item.name().toLowerCase().contains("laptop") ||
+                        item.description().toLowerCase().contains("laptop"));
     }
 
     @Test
@@ -238,7 +238,7 @@ class ItemServiceImplIntegrationTest {
         List<ItemResponseDto> items = itemService.findByRequestId(requestId);
 
         assertThat(items).isNotEmpty();
-        assertThat(items).allMatch(item -> requestId.equals(item.getRequestId()));
+        assertThat(items).allMatch(item -> requestId.equals(item.requestId()));
     }
 
     @Test

@@ -43,17 +43,17 @@ class BookingControllerTest {
     }
 
     private ItemResponseDto createTestItemResponse(Long id, Long ownerId) {
-        ItemResponseDto item = new ItemResponseDto();
-        item.setId(id);
-        item.setName("Test Item " + id);
-        item.setDescription("Test Description " + id);
-        item.setAvailable(true);
-        item.setOwner(createTestUserResponse(ownerId));
-        item.setRequestId(null);
-        item.setComments(Collections.emptyList());
-        item.setLastBooking(null);
-        item.setNextBooking(null);
-        return item;
+        return new ItemResponseDto(
+                id,
+                "Test Item " + id,
+                "Test Description " + id,
+                true,
+                createTestUserResponse(ownerId),
+                null,
+                Collections.emptyList(),
+                null,
+                null
+        );
     }
 
     private BookingResponseDto createTestBookingResponse() {
@@ -93,10 +93,17 @@ class BookingControllerTest {
     @Test
     void updateStatus_shouldReturnApprovedBooking() throws Exception {
         BookingResponseDto response = createTestBookingResponse();
-        response.setStatus(BookingStatus.APPROVED);
+        BookingResponseDto approvedResponse = BookingResponseDto.builder()
+                .id(response.id())
+                .start(response.start())
+                .end(response.end())
+                .status(BookingStatus.APPROVED)
+                .item(response.item())
+                .booker(response.booker())
+                .build();
 
         Mockito.when(bookingService.updateStatus(eq(1L), eq(1L), eq(true)))
-                .thenReturn(response);
+                .thenReturn(approvedResponse);
 
         mockMvc.perform(patch("/bookings/1")
                         .header("X-Sharer-User-Id", 1L)
@@ -108,10 +115,17 @@ class BookingControllerTest {
     @Test
     void updateStatus_shouldReturnRejectedBooking() throws Exception {
         BookingResponseDto response = createTestBookingResponse();
-        response.setStatus(BookingStatus.REJECTED);
+        BookingResponseDto rejectedResponse = BookingResponseDto.builder()
+                .id(response.id())
+                .start(response.start())
+                .end(response.end())
+                .status(BookingStatus.REJECTED)
+                .item(response.item())
+                .booker(response.booker())
+                .build();
 
         Mockito.when(bookingService.updateStatus(eq(1L), eq(1L), eq(false)))
-                .thenReturn(response);
+                .thenReturn(rejectedResponse);
 
         mockMvc.perform(patch("/bookings/1")
                         .header("X-Sharer-User-Id", 1L)
@@ -152,8 +166,14 @@ class BookingControllerTest {
 
     @Test
     void findByBookerId_withWaitingStatus_shouldReturnBookings() throws Exception {
-        BookingResponseDto response = createTestBookingResponse();
-        response.setStatus(BookingStatus.WAITING);
+        BookingResponseDto response = BookingResponseDto.builder()
+                .id(1L)
+                .start(LocalDateTime.now().plusDays(1))
+                .end(LocalDateTime.now().plusDays(2))
+                .status(BookingStatus.WAITING)
+                .item(createTestItemResponse(1L, 1L))
+                .booker(createTestUserResponse(2L))
+                .build();
 
         Mockito.when(bookingService.findByBookerId(eq(2L), eq(BookingStatus.WAITING), eq(0), eq(10)))
                 .thenReturn(List.of(response));
@@ -169,8 +189,14 @@ class BookingControllerTest {
 
     @Test
     void findByBookerId_withApprovedStatus_shouldReturnBookings() throws Exception {
-        BookingResponseDto response = createTestBookingResponse();
-        response.setStatus(BookingStatus.APPROVED);
+        BookingResponseDto response = BookingResponseDto.builder()
+                .id(1L)
+                .start(LocalDateTime.now().plusDays(1))
+                .end(LocalDateTime.now().plusDays(2))
+                .status(BookingStatus.APPROVED)
+                .item(createTestItemResponse(1L, 1L))
+                .booker(createTestUserResponse(2L))
+                .build();
 
         Mockito.when(bookingService.findByBookerId(eq(2L), eq(BookingStatus.APPROVED), eq(0), eq(10)))
                 .thenReturn(List.of(response));
@@ -186,8 +212,14 @@ class BookingControllerTest {
 
     @Test
     void findByBookerId_withRejectedStatus_shouldReturnBookings() throws Exception {
-        BookingResponseDto response = createTestBookingResponse();
-        response.setStatus(BookingStatus.REJECTED);
+        BookingResponseDto response = BookingResponseDto.builder()
+                .id(1L)
+                .start(LocalDateTime.now().plusDays(1))
+                .end(LocalDateTime.now().plusDays(2))
+                .status(BookingStatus.REJECTED)
+                .item(createTestItemResponse(1L, 1L))
+                .booker(createTestUserResponse(2L))
+                .build();
 
         Mockito.when(bookingService.findByBookerId(eq(2L), eq(BookingStatus.REJECTED), eq(0), eq(10)))
                 .thenReturn(List.of(response));
@@ -203,8 +235,14 @@ class BookingControllerTest {
 
     @Test
     void findByBookerId_withCanceledStatus_shouldReturnBookings() throws Exception {
-        BookingResponseDto response = createTestBookingResponse();
-        response.setStatus(BookingStatus.CANCELED);
+        BookingResponseDto response = BookingResponseDto.builder()
+                .id(1L)
+                .start(LocalDateTime.now().plusDays(1))
+                .end(LocalDateTime.now().plusDays(2))
+                .status(BookingStatus.CANCELED)
+                .item(createTestItemResponse(1L, 1L))
+                .booker(createTestUserResponse(2L))
+                .build();
 
         Mockito.when(bookingService.findByBookerId(eq(2L), eq(BookingStatus.CANCELED), eq(0), eq(10)))
                 .thenReturn(List.of(response));
@@ -236,8 +274,14 @@ class BookingControllerTest {
 
     @Test
     void findByOwnerId_withWaitingStatus_shouldReturnBookings() throws Exception {
-        BookingResponseDto response = createTestBookingResponse();
-        response.setStatus(BookingStatus.WAITING);
+        BookingResponseDto response = BookingResponseDto.builder()
+                .id(1L)
+                .start(LocalDateTime.now().plusDays(1))
+                .end(LocalDateTime.now().plusDays(2))
+                .status(BookingStatus.WAITING)
+                .item(createTestItemResponse(1L, 1L))
+                .booker(createTestUserResponse(2L))
+                .build();
 
         Mockito.when(bookingService.findByOwnerId(eq(1L), eq(BookingStatus.WAITING), eq(0), eq(10)))
                 .thenReturn(List.of(response));
@@ -253,8 +297,14 @@ class BookingControllerTest {
 
     @Test
     void findByOwnerId_withApprovedStatus_shouldReturnBookings() throws Exception {
-        BookingResponseDto response = createTestBookingResponse();
-        response.setStatus(BookingStatus.APPROVED);
+        BookingResponseDto response = BookingResponseDto.builder()
+                .id(1L)
+                .start(LocalDateTime.now().plusDays(1))
+                .end(LocalDateTime.now().plusDays(2))
+                .status(BookingStatus.APPROVED)
+                .item(createTestItemResponse(1L, 1L))
+                .booker(createTestUserResponse(2L))
+                .build();
 
         Mockito.when(bookingService.findByOwnerId(eq(1L), eq(BookingStatus.APPROVED), eq(0), eq(10)))
                 .thenReturn(List.of(response));
@@ -270,8 +320,14 @@ class BookingControllerTest {
 
     @Test
     void findByOwnerId_withRejectedStatus_shouldReturnBookings() throws Exception {
-        BookingResponseDto response = createTestBookingResponse();
-        response.setStatus(BookingStatus.REJECTED);
+        BookingResponseDto response = BookingResponseDto.builder()
+                .id(1L)
+                .start(LocalDateTime.now().plusDays(1))
+                .end(LocalDateTime.now().plusDays(2))
+                .status(BookingStatus.REJECTED)
+                .item(createTestItemResponse(1L, 1L))
+                .booker(createTestUserResponse(2L))
+                .build();
 
         Mockito.when(bookingService.findByOwnerId(eq(1L), eq(BookingStatus.REJECTED), eq(0), eq(10)))
                 .thenReturn(List.of(response));
@@ -287,8 +343,14 @@ class BookingControllerTest {
 
     @Test
     void findByOwnerId_withCanceledStatus_shouldReturnBookings() throws Exception {
-        BookingResponseDto response = createTestBookingResponse();
-        response.setStatus(BookingStatus.CANCELED);
+        BookingResponseDto response = BookingResponseDto.builder()
+                .id(1L)
+                .start(LocalDateTime.now().plusDays(1))
+                .end(LocalDateTime.now().plusDays(2))
+                .status(BookingStatus.CANCELED)
+                .item(createTestItemResponse(1L, 1L))
+                .booker(createTestUserResponse(2L))
+                .build();
 
         Mockito.when(bookingService.findByOwnerId(eq(1L), eq(BookingStatus.CANCELED), eq(0), eq(10)))
                 .thenReturn(List.of(response));
@@ -329,7 +391,6 @@ class BookingControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.error").value("Отсутствует обязательный заголовок: X-Sharer-User-Id"));
     }
-
 
     @Test
     void findByBookerId_withoutUserIdHeader_shouldReturnBadRequest() throws Exception {

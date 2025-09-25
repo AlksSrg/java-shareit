@@ -41,9 +41,9 @@ class BookingMapperTest {
 
         var dto = mapper.toResponseDto(entity);
 
-        assertThat(dto.getId()).isEqualTo(1L);
-        assertThat(dto.getStart()).isEqualTo(entity.getStart());
-        assertThat(dto.getEnd()).isEqualTo(entity.getEnd());
-        assertThat(dto.getStatus()).isEqualTo(BookingStatus.WAITING);
+        assertThat(dto.id()).isEqualTo(1L);
+        assertThat(dto.start()).isEqualTo(entity.getStart());
+        assertThat(dto.end()).isEqualTo(entity.getEnd());
+        assertThat(dto.status()).isEqualTo(BookingStatus.WAITING);
     }
 }

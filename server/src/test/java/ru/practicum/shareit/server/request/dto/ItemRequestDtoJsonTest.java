@@ -20,12 +20,12 @@ class ItemRequestDtoJsonTest {
     @Test
     void shouldSerializeToJson() throws Exception {
         LocalDateTime created = LocalDateTime.of(2023, 1, 1, 10, 0, 0);
-        ItemRequestDto dto = ItemRequestDto.builder()
-                .id(1L)
-                .description("Need a new item")
-                .created(created)
-                .items(Collections.emptyList())
-                .build();
+        ItemRequestDto dto = new ItemRequestDto(
+                1L,
+                "Need a new item",
+                created,
+                Collections.emptyList()
+        );
 
         String json = objectMapper.writeValueAsString(dto);
 
@@ -41,10 +41,10 @@ class ItemRequestDtoJsonTest {
 
         ItemRequestDto dto = objectMapper.readValue(json, ItemRequestDto.class);
 
-        assertThat(dto.getId()).isEqualTo(1L);
-        assertThat(dto.getDescription()).isEqualTo("Need a new item");
-        assertThat(dto.getCreated()).isEqualTo(LocalDateTime.of(2023, 1, 1, 10, 0, 0));
-        assertThat(dto.getItems()).isEmpty();
+        assertThat(dto.id()).isEqualTo(1L);
+        assertThat(dto.description()).isEqualTo("Need a new item");
+        assertThat(dto.created()).isEqualTo(LocalDateTime.of(2023, 1, 1, 10, 0, 0));
+        assertThat(dto.items()).isEmpty();
     }
 
     @Test
@@ -53,9 +53,9 @@ class ItemRequestDtoJsonTest {
 
         ItemRequestDto dto = objectMapper.readValue(json, ItemRequestDto.class);
 
-        assertThat(dto.getId()).isNull();
-        assertThat(dto.getDescription()).isEqualTo("Need a new item");
-        assertThat(dto.getCreated()).isNull();
-        assertThat(dto.getItems()).isNull();
+        assertThat(dto.id()).isNull();
+        assertThat(dto.description()).isEqualTo("Need a new item");
+        assertThat(dto.created()).isNull();
+        assertThat(dto.items()).isNull();
     }
 }

@@ -1,7 +1,7 @@
 package ru.practicum.shareit.user.client;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import ru.practicum.shareit.client.BaseClient;
 import ru.practicum.shareit.user.dto.UserCreateRequestDto;
@@ -11,7 +11,7 @@ import ru.practicum.shareit.user.dto.UserUpdateRequestDto;
  * Клиент для взаимодействия с сервером пользователей.
  * Обеспечивает REST вызовы к основному серверу для операций с пользователями.
  */
-@Component
+@Service
 public class UserClient extends BaseClient {
 
     private static final String API_PREFIX = "/users";

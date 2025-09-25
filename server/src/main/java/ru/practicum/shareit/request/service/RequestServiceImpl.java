@@ -56,7 +56,7 @@ public class RequestServiceImpl implements RequestService {
         itemRequest.setCreated(LocalDateTime.now());
 
         ItemRequest savedRequest = itemRequestRepository.save(itemRequest);
-        return itemRequestMapper.toDto(savedRequest);
+        return enrichWithItems(savedRequest);
     }
 
     /**
@@ -129,12 +129,16 @@ public class RequestServiceImpl implements RequestService {
      * @return DTO запроса с дополнительной информацией о связанных вещах
      */
     private ItemRequestDto enrichWithItems(ItemRequest itemRequest) {
-        ItemRequestDto dto = itemRequestMapper.toDto(itemRequest);
         List<ItemResponseDto> items = itemRepository.findByRequestId(itemRequest.getId()).stream()
                 .map(itemMapper::toResponseDto)
                 .toList();
-        dto.setItems(items != null ? items : Collections.emptyList());
-        return dto;
+
+        return ItemRequestDto.builder()
+                .id(itemRequest.getId())
+                .description(itemRequest.getDescription())
+                .created(itemRequest.getCreated())
+                .items(items != null ? items : Collections.emptyList())
+                .build();
     }
 
     /**

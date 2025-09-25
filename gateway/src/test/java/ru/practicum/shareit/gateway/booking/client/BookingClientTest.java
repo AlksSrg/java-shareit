@@ -49,9 +49,9 @@ class BookingClientTest {
                 eq(HttpMethod.POST),
                 any(),
                 eq(Object.class)
-        )).thenReturn(ResponseEntity.ok().build());
+        )).thenReturn(ResponseEntity.ok(new Object()));
 
-        ResponseEntity<Object> response = bookingClient.create(userId, bookingCreateRequestDto);
+        Object response = bookingClient.create(userId, bookingCreateRequestDto);
 
         assertNotNull(response);
 
@@ -75,9 +75,9 @@ class BookingClientTest {
                 any(),
                 eq(Object.class),
                 anyMap()
-        )).thenReturn(ResponseEntity.ok().build());
+        )).thenReturn(ResponseEntity.ok(new Object()));
 
-        ResponseEntity<Object> response = bookingClient.updateStatus(userId, bookingId, true);
+        Object response = bookingClient.updateStatus(userId, bookingId, true);
 
         assertNotNull(response);
 
@@ -102,9 +102,9 @@ class BookingClientTest {
                 eq(HttpMethod.GET),
                 any(),
                 eq(Object.class)
-        )).thenReturn(ResponseEntity.ok().build());
+        )).thenReturn(ResponseEntity.ok(new Object()));
 
-        ResponseEntity<Object> response = bookingClient.findById(userId, bookingId);
+        Object response = bookingClient.findById(userId, bookingId);
 
         assertNotNull(response);
 
@@ -128,9 +128,9 @@ class BookingClientTest {
                 any(),
                 eq(Object.class),
                 anyMap()
-        )).thenReturn(ResponseEntity.ok().build());
+        )).thenReturn(ResponseEntity.ok(new Object()));
 
-        ResponseEntity<Object> response = bookingClient.findByBookerId(userId, "ALL", 0, 10);
+        Object response = bookingClient.findByBookerId(userId, "ALL", 0, 10);
 
         assertNotNull(response);
 
@@ -158,9 +158,9 @@ class BookingClientTest {
                 any(),
                 eq(Object.class),
                 anyMap()
-        )).thenReturn(ResponseEntity.ok().build());
+        )).thenReturn(ResponseEntity.ok(new Object()));
 
-        ResponseEntity<Object> response = bookingClient.findByOwnerId(userId, "ALL", 0, 10);
+        Object response = bookingClient.findByOwnerId(userId, "ALL", 0, 10);
 
         assertNotNull(response);
 

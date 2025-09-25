@@ -33,25 +33,26 @@ class ItemRequestMapperTest {
         ItemRequestDto dto = mapper.toDto(itemRequest);
 
         assertNotNull(dto);
-        assertEquals(itemRequest.getId(), dto.getId());
-        assertEquals(itemRequest.getDescription(), dto.getDescription());
-        assertEquals(itemRequest.getCreated(), dto.getCreated());
-        assertNull(dto.getItems());
+        assertEquals(itemRequest.getId(), dto.id());
+        assertEquals(itemRequest.getDescription(), dto.description());
+        assertEquals(itemRequest.getCreated(), dto.created());
+        assertNull(dto.items());
     }
 
     @Test
     void toEntity_shouldConvertDtoToEntity() {
-        ItemRequestDto dto = ItemRequestDto.builder()
-                .id(1L)
-                .description("Need item description")
-                .created(LocalDateTime.of(2023, 1, 1, 10, 0))
-                .build();
+        ItemRequestDto dto = new ItemRequestDto(
+                1L,
+                "Need item description",
+                LocalDateTime.of(2023, 1, 1, 10, 0),
+                null
+        );
 
         ItemRequest entity = mapper.toEntity(dto);
 
         assertNotNull(entity);
-        assertEquals(dto.getId(), entity.getId());
-        assertEquals(dto.getDescription(), entity.getDescription());
+        assertEquals(dto.id(), entity.getId());
+        assertEquals(dto.description(), entity.getDescription());
         assertNull(entity.getRequestor());
         assertNull(entity.getCreated());
     }

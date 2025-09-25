@@ -39,7 +39,33 @@ class ItemRequestClientIntegrationTest {
                 .andExpect(method(HttpMethod.POST))
                 .andRespond(withSuccess());
 
-        itemRequestClient.create(new ItemRequestDto(), 1L);
+        // Создаем объект с помощью билдера
+        ItemRequestDto requestDto = ItemRequestDto.builder()
+                .id(null)
+                .description("Test description")
+                .created(null)
+                .items(null)
+                .build();
+
+        itemRequestClient.create(requestDto, 1L);
+        server.verify();
+    }
+
+    @Test
+    void createItemRequest_withEmptyDto_shouldReturnOk() {
+        server.expect(once(), requestTo("http://localhost:9090/requests"))
+                .andExpect(method(HttpMethod.POST))
+                .andRespond(withSuccess());
+
+        // Альтернативный вариант - создание с минимальными данными
+        ItemRequestDto requestDto = new ItemRequestDto(
+                null,
+                "Test description",
+                null,
+                null
+        );
+
+        itemRequestClient.create(requestDto, 1L);
         server.verify();
     }
 

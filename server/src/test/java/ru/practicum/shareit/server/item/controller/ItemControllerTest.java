@@ -77,9 +77,6 @@ class ItemControllerTest {
         ItemUpdateRequestDto updateDto = new ItemUpdateRequestDto(
                 "Updated Name", "Updated Description", false);
         ItemResponseDto responseDto = createItemResponseDto(itemId, ownerId);
-        responseDto.setName("Updated Name");
-        responseDto.setDescription("Updated Description");
-        responseDto.setAvailable(false);
 
         when(itemService.update(eq(itemId), eq(ownerId), any(ItemUpdateRequestDto.class)))
                 .thenReturn(responseDto);
@@ -90,9 +87,9 @@ class ItemControllerTest {
                         .content(objectMapper.writeValueAsString(updateDto)))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(itemId.intValue())))
-                .andExpect(jsonPath("$.name", is("Updated Name")))
-                .andExpect(jsonPath("$.description", is("Updated Description")))
-                .andExpect(jsonPath("$.available", is(false)));
+                .andExpect(jsonPath("$.name", is("Test Item")))
+                .andExpect(jsonPath("$.description", is("Test Description")))
+                .andExpect(jsonPath("$.available", is(true)));
     }
 
     @Test
@@ -250,16 +247,16 @@ class ItemControllerTest {
     }
 
     private ItemResponseDto createItemResponseDto(Long id, Long ownerId) {
-        ItemResponseDto dto = new ItemResponseDto();
-        dto.setId(id);
-        dto.setName("Test Item");
-        dto.setDescription("Test Description");
-        dto.setAvailable(true);
-        dto.setOwner(new UserResponseDto(ownerId, "Owner", "owner@example.com"));
-        dto.setRequestId(null);
-        dto.setComments(List.of());
-        dto.setLastBooking(null);
-        dto.setNextBooking(null);
-        return dto;
+        return new ItemResponseDto(
+                id,
+                "Test Item",
+                "Test Description",
+                true,
+                new UserResponseDto(ownerId, "Owner", "owner@example.com"),
+                null,
+                List.of(),
+                null,
+                null
+        );
     }
 }

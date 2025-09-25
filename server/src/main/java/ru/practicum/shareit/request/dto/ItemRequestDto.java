@@ -1,9 +1,6 @@
 package ru.practicum.shareit.request.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import ru.practicum.shareit.item.dto.ItemResponseDto;
 
 import java.time.LocalDateTime;
@@ -13,29 +10,27 @@ import java.util.List;
  * DTO для запроса вещи на сервере.
  * Содержит информацию о запросе вещи, включая ответы на него.
  */
-@Data
+
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
-public class ItemRequestDto {
+public record ItemRequestDto(
+        /**
+         * Уникальный идентификатор запроса.
+         */
+        Long id,
 
-    /**
-     * Уникальный идентификатор запроса.
-     */
-    private Long id;
+        /**
+         * Текст запроса, содержащий описание требуемой вещи.
+         */
+        String description,
 
-    /**
-     * Текст запроса, содержащий описание требуемой вещи.
-     */
-    private String description;
+        /**
+         * Дата и время создания запроса.
+         */
+        LocalDateTime created,
 
-    /**
-     * Дата и время создания запроса.
-     */
-    private LocalDateTime created;
-
-    /**
-     * Список ответов на запрос в формате DTO.
-     */
-    private List<ItemResponseDto> items;
+        /**
+         * Список ответов на запрос в формате DTO.
+         */
+        List<ItemResponseDto> items
+) {
 }

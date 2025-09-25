@@ -67,16 +67,17 @@ class BookingDtoJsonTest {
 
         UserResponseDto booker = new UserResponseDto(200L, "Test User", "test@example.com");
 
-        ItemResponseDto item = new ItemResponseDto();
-        item.setId(100L);
-        item.setName("Test Item");
-        item.setDescription("Test Description");
-        item.setAvailable(true);
-        item.setOwner(booker);
-        item.setRequestId(null);
-        item.setComments(List.of());
-        item.setLastBooking(null);
-        item.setNextBooking(null);
+        ItemResponseDto item = new ItemResponseDto(
+                100L,
+                "Test Item",
+                "Test Description",
+                true,
+                booker,
+                null,
+                List.of(),
+                null,
+                null
+        );
 
         BookingResponseDto dto = BookingResponseDto.builder()
                 .id(1L)
@@ -120,26 +121,26 @@ class BookingDtoJsonTest {
 
         BookingResponseDto dto = responseJson.parse(json).getObject();
 
-        assertThat(dto.getId()).isEqualTo(1L);
-        assertThat(dto.getStart()).isEqualTo(LocalDateTime.of(2024, 1, 15, 10, 0));
-        assertThat(dto.getEnd()).isEqualTo(LocalDateTime.of(2024, 1, 16, 12, 0));
-        assertThat(dto.getStatus()).isEqualTo(BookingStatus.WAITING);
+        assertThat(dto.id()).isEqualTo(1L);
+        assertThat(dto.start()).isEqualTo(LocalDateTime.of(2024, 1, 15, 10, 0));
+        assertThat(dto.end()).isEqualTo(LocalDateTime.of(2024, 1, 16, 12, 0));
+        assertThat(dto.status()).isEqualTo(BookingStatus.WAITING);
 
-        assertThat(dto.getBooker()).isNotNull();
-        assertThat(dto.getBooker().id()).isEqualTo(200L);
-        assertThat(dto.getBooker().name()).isEqualTo("Test User");
-        assertThat(dto.getBooker().email()).isEqualTo("test@example.com");
+        assertThat(dto.booker()).isNotNull();
+        assertThat(dto.booker().id()).isEqualTo(200L);
+        assertThat(dto.booker().name()).isEqualTo("Test User");
+        assertThat(dto.booker().email()).isEqualTo("test@example.com");
 
-        assertThat(dto.getItem()).isNotNull();
-        assertThat(dto.getItem().getId()).isEqualTo(100L);
-        assertThat(dto.getItem().getName()).isEqualTo("Test Item");
-        assertThat(dto.getItem().getDescription()).isEqualTo("Test Description");
-        assertThat(dto.getItem().getAvailable()).isTrue();
-        assertThat(dto.getItem().getOwner()).isNotNull();
-        assertThat(dto.getItem().getOwner().id()).isEqualTo(300L);
-        assertThat(dto.getItem().getComments()).isEmpty();
-        assertThat(dto.getItem().getLastBooking()).isNull();
-        assertThat(dto.getItem().getNextBooking()).isNull();
+        assertThat(dto.item()).isNotNull();
+        assertThat(dto.item().id()).isEqualTo(100L);
+        assertThat(dto.item().name()).isEqualTo("Test Item");
+        assertThat(dto.item().description()).isEqualTo("Test Description");
+        assertThat(dto.item().available()).isTrue();
+        assertThat(dto.item().owner()).isNotNull();
+        assertThat(dto.item().owner().id()).isEqualTo(300L);
+        assertThat(dto.item().comments()).isEmpty();
+        assertThat(dto.item().lastBooking()).isNull();
+        assertThat(dto.item().nextBooking()).isNull();
     }
 
     @Test
@@ -153,12 +154,12 @@ class BookingDtoJsonTest {
 
         BookingResponseDto dto = responseJson.parse(json).getObject();
 
-        assertThat(dto.getId()).isEqualTo(1L);
-        assertThat(dto.getStart()).isEqualTo(LocalDateTime.of(2024, 1, 15, 10, 0));
-        assertThat(dto.getEnd()).isEqualTo(LocalDateTime.of(2024, 1, 16, 12, 0));
-        assertThat(dto.getStatus()).isEqualTo(BookingStatus.WAITING);
-        assertThat(dto.getItem()).isNull();
-        assertThat(dto.getBooker()).isNull();
+        assertThat(dto.id()).isEqualTo(1L);
+        assertThat(dto.start()).isEqualTo(LocalDateTime.of(2024, 1, 15, 10, 0));
+        assertThat(dto.end()).isEqualTo(LocalDateTime.of(2024, 1, 16, 12, 0));
+        assertThat(dto.status()).isEqualTo(BookingStatus.WAITING);
+        assertThat(dto.item()).isNull();
+        assertThat(dto.booker()).isNull();
     }
 
     @Test

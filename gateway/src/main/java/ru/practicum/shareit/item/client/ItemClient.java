@@ -1,7 +1,7 @@
 package ru.practicum.shareit.item.client;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import ru.practicum.shareit.client.BaseClient;
 import ru.practicum.shareit.item.dto.CommentCreateRequestDto;
@@ -15,7 +15,7 @@ import java.util.Map;
  * Обеспечивает REST вызовы к основному серверу для операций с вещами.
  * Наследует базовый функционал от {@link BaseClient}.
  */
-@Component
+@Service
 public class ItemClient extends BaseClient {
 
     private static final String API_PREFIX = "/items";

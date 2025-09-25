@@ -63,7 +63,21 @@ public class ItemServiceImpl implements ItemService {
         }
 
         Item savedItem = itemRepository.save(item);
-        return itemMapper.toResponseDto(savedItem);
+        ItemResponseDto responseDto = itemMapper.toResponseDto(savedItem);
+
+        // Добавляем комментарии к ответу
+        List<CommentResponseDto> comments = getCommentsForItem(savedItem.getId());
+        return new ItemResponseDto(
+                responseDto.id(),
+                responseDto.name(),
+                responseDto.description(),
+                responseDto.available(),
+                responseDto.owner(),
+                responseDto.requestId(),
+                comments,
+                responseDto.lastBooking(),
+                responseDto.nextBooking()
+        );
     }
 
     /**
@@ -85,7 +99,21 @@ public class ItemServiceImpl implements ItemService {
 
         itemMapper.updateEntity(itemUpdateRequestDto, item);
         Item updatedItem = itemRepository.save(item);
-        return itemMapper.toResponseDto(updatedItem);
+        ItemResponseDto responseDto = itemMapper.toResponseDto(updatedItem);
+
+        // Добавляем комментарии к ответу
+        List<CommentResponseDto> comments = getCommentsForItem(updatedItem.getId());
+        return new ItemResponseDto(
+                responseDto.id(),
+                responseDto.name(),
+                responseDto.description(),
+                responseDto.available(),
+                responseDto.owner(),
+                responseDto.requestId(),
+                comments,
+                responseDto.lastBooking(),
+                responseDto.nextBooking()
+        );
     }
 
     /**
@@ -127,7 +155,21 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<ItemResponseDto> findByRequestId(Long requestId) {
         return itemRepository.findByRequestId(requestId).stream()
-                .map(itemMapper::toResponseDto)
+                .map(item -> {
+                    ItemResponseDto responseDto = itemMapper.toResponseDto(item);
+                    List<CommentResponseDto> comments = getCommentsForItem(item.getId());
+                    return new ItemResponseDto(
+                            responseDto.id(),
+                            responseDto.name(),
+                            responseDto.description(),
+                            responseDto.available(),
+                            responseDto.owner(),
+                            responseDto.requestId(),
+                            comments,
+                            responseDto.lastBooking(),
+                            responseDto.nextBooking()
+                    );
+                })
                 .toList();
     }
 
@@ -154,7 +196,21 @@ public class ItemServiceImpl implements ItemService {
         return foundItems.stream()
                 .skip(from)
                 .limit(size)
-                .map(itemMapper::toResponseDto)
+                .map(item -> {
+                    ItemResponseDto responseDto = itemMapper.toResponseDto(item);
+                    List<CommentResponseDto> comments = getCommentsForItem(item.getId());
+                    return new ItemResponseDto(
+                            responseDto.id(),
+                            responseDto.name(),
+                            responseDto.description(),
+                            responseDto.available(),
+                            responseDto.owner(),
+                            responseDto.requestId(),
+                            comments,
+                            responseDto.lastBooking(),
+                            responseDto.nextBooking()
+                    );
+                })
                 .toList();
     }
 
@@ -197,9 +253,19 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public ItemResponseDto findById(Long id) {
         Item item = getItemOrThrow(id);
-        ItemResponseDto response = itemMapper.toResponseDto(item);
-        response.setComments(getCommentsForItem(id));
-        return response;
+        ItemResponseDto responseDto = itemMapper.toResponseDto(item);
+        List<CommentResponseDto> comments = getCommentsForItem(id);
+        return new ItemResponseDto(
+                responseDto.id(),
+                responseDto.name(),
+                responseDto.description(),
+                responseDto.available(),
+                responseDto.owner(),
+                responseDto.requestId(),
+                comments,
+                responseDto.lastBooking(),
+                responseDto.nextBooking()
+        );
     }
 
     /**
@@ -221,7 +287,21 @@ public class ItemServiceImpl implements ItemService {
         return items.stream()
                 .skip(from)
                 .limit(size)
-                .map(itemMapper::toResponseDto)
+                .map(item -> {
+                    ItemResponseDto responseDto = itemMapper.toResponseDto(item);
+                    List<CommentResponseDto> comments = getCommentsForItem(item.getId());
+                    return new ItemResponseDto(
+                            responseDto.id(),
+                            responseDto.name(),
+                            responseDto.description(),
+                            responseDto.available(),
+                            responseDto.owner(),
+                            responseDto.requestId(),
+                            comments,
+                            responseDto.lastBooking(),
+                            responseDto.nextBooking()
+                    );
+                })
                 .toList();
     }
 

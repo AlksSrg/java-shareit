@@ -1,5 +1,5 @@
-FROM eclipse-temurin:21-jre-jammy
+FROM eclipse-temurin:21.0.4_9-jre-jammy
 VOLUME /tmp
-ARG JAR_FILE=target/*.jar
+ARG JAR_FILE=target/gateway-*.jar
 COPY ${JAR_FILE} app.jar
-ENTRYPOINT ["sh", "-c", "java ${JAVA_OPTS} -jar /app.jar"]
+ENTRYPOINT ["java", "-jar", "/app.jar"]
